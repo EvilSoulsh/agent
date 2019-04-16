@@ -1,0 +1,18 @@
+#!/bin/sh
+filenum=`ls -l /opt/fonsview/etc/db/bin/db_cfg_*.xml|wc -l`
+if [ "$filenum" == "1" ]; then
+   vip=`cat /opt/fonsview/etc/db/bin/db_cfg_*.xml|grep vip`
+   ipaddress_1=`echo $vip |sed 's/<havip>//g'`
+   ipaddress=`echo $ipaddress_1|sed 's/<\/havip>//g'`
+	if ifconfig |grep $ipaddress
+	then 
+		echo active
+		exit 0
+	fi
+		echo standby
+		exit 0
+else
+   echo no found db cfg file
+   exit 1
+fi
+

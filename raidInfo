@@ -1,0 +1,11 @@
+#!/bin/sh
+#name:disk
+#function:fetch disk raid info
+
+mkdir disk
+cat /proc/mdstat > disk/raidinfo.txt
+cat disk/raidinfo.txt | while read line
+do
+   echo "$line &lt;br&gt;"
+done
+exit 0

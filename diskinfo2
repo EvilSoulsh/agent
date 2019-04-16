@@ -1,0 +1,35 @@
+#!/bin/sh
+#diskName:disk
+#function:fetch disk info,get return value is 0 or not check the "SMART Health Status" is OK or not
+
+diskName=$1
+if [ -d disk ]
+then
+rm -rf disk
+fi
+mkdir disk
+
+tempdisk="/dev/md0";
+if [ $tempdisk == $diskName ]
+then
+   echo "result: PASSED";
+   exit;
+fi
+
+MEGA_RAID=`egrep -c  'DELL|Slimtype' /proc/scsi/scsi`
+if [ $MEGA_RAID -gt 0 ]; then
+	smartctl -a  -d megaraid,0 $diskName |  tr -s '\n' > disk/smartinfo.txt
+else
+	smartctl -H $diskName |  tr -s '\n' > disk/smartinfo.txt
+fi
+
+if [ $? == "0" ]
+then
+        cat disk/smartinfo.txt | tr -s '\n' | while read line
+        do
+                echo "$line &lt;br&gt;"
+        done
+else
+        exit 1
+fi
+exit 0

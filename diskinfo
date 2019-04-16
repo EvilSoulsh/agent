@@ -1,0 +1,31 @@
+#!/bin/sh
+#name:disk
+#function:fetch disk info
+
+diskname=`fdisk -l 2>/dev/null | grep Disk | grep -v /dev/md | grep -v identifier | grep -v label | grep -v mapper | awk '{print $2}' | sed -e 's/://g'`
+for name in $diskname;do
+	tt=$tt$name']'
+done
+diskname1=$tt
+
+disksize=`fdisk -l 2>/dev/null | grep Disk | grep -v md | grep -v identifier | grep -v label | grep -v mapper | awk '{print $5}'`
+for size in $disksize;do
+      ss=$ss$size']'
+done
+disksize=$ss
+
+disksn=`ls -l /dev/disk/by-id/|grep -v total|grep -v part |awk '{print $9 $10  $11}' | sort -k2`
+for dname in $diskname;do
+for sn in $disksn;do
+temp1=x"${dname##*\/}"
+temp2=x"${sn##*\/}"
+
+if [ x"$temp1" = x"$temp2" ]; then
+        yy=$yy${sn%%->*}']'
+fi
+done
+done
+disksn=$yy
+
+echo -e "diskname=$diskname1;disksize=$disksize;disksn=$disksn;"
+exit 0

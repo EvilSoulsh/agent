@@ -1,0 +1,29 @@
+#!/bin/sh
+#name:disk
+#function:fetch disk info
+
+diskname=`fdisk -l 2>/dev/null | grep Disk | grep -v /dev/md | awk '{print $2}' | sed -e 's/:/\ /g'`
+flag=1
+for name in $diskname;do
+	    tt=$tt$name']'
+	    diskTemperature=`smartctl -A $name |awk /'Current Drive Temperature/ {print $4}'`
+        tt1=$tt1$diskTemperature']'
+        diskTempeThrod=`smartctl -A $name |awk /'Drive Trip Temperature/ {print $4}'`
+        diskTemperature=$diskTemperature'1'
+        diskTempeThrod=$diskTempeThrod'1'
+        diskTempeThrod=50        
+        if test $diskTemperature -gt $diskTempeThrod;
+        then
+           flag=1
+           tt2=$tt2$flag']'
+        else
+           flag=0
+           tt2=$tt2$flag']'
+        fi  
+done
+diskname=$tt
+diskTemperature=$tt1
+isTemprAlarm=$tt2
+
+echo -e "diskname=$diskname;isTemprAlarm=$isTemprAlarm;diskTemperature=$diskTemperature"
+exit 0

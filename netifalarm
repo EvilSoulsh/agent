@@ -1,0 +1,8 @@
+#!/bin/sh
+#name:network if status
+#function:fetch network interface info
+ethname=$1
+cmd="ethtool $ethname |grep 'Link detected'"
+eval $cmd
+exit $?
+

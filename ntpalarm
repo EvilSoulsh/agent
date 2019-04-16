@@ -1,0 +1,7 @@
+#!/bin/sh
+#name:disk
+#function:fetch disk info
+
+ntpstaut=`systemctl status ntpdate.service`
+echo -e "$ntpstaut"
+exit 0

@@ -1,0 +1,8 @@
+#!/bin/bash
+#name:jboss
+#function:kill jboss
+
+for i in ` ps -ef | grep -w java |grep -v grep |awk '{print $2 "\t"$3}'`;
+do kill -9 $i
+done
+
